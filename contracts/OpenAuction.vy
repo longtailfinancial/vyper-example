@@ -3,6 +3,8 @@
 # Auction params
 # Beneficiary receives money from the highest bidder
 beneficiary: public(address)
+
+# Auction Start and End
 auctionStart: public(uint256)
 auctionEnd: public(uint256)
 
@@ -21,6 +23,8 @@ pendingReturns: public(HashMap[address, uint256])
 # Create a simple auction with `_auction_start` and
 # `_bidding_time` seconds bidding time on behalf of the 
 # beneficiary address `beneficiary`.
+# `_auction_start` is a unix timestamp
+# `_bidding_time` is a number of seconds
 @external
 def __init__(_beneficiary: address, _auction_start: uint256, _bidding_time: uint256):
     self.beneficiary = _beneficiary
