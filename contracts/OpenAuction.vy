@@ -12,8 +12,6 @@ auctionEnd: public(uint256)
 highestBidder: public(address)
 highestBid: public(uint256)
 
-
-
 # Set to true at the end. Dissalows any change
 ended: public(bool)
 
