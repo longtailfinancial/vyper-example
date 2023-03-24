@@ -13,6 +13,13 @@ vyper = "^0.3.7"
 click = "^8.1.3"
 
 
+[tool.poetry.group.dev.dependencies]
+panel = "^0.14.4"
+param = "^1.13.0"
+hvplot = "^0.8.3"
+pandas = "^1.5.3"
+holoviews = "^1.15.4"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
