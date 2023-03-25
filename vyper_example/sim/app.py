@@ -1,8 +1,8 @@
 import panel as pn
 import holoviews as hv
-from vyper_example.sim.open_auction import View as OpenAuctionView
-from vyper_example.sim.account import View as AccountView
-from vyper_example.sim.sim import View as SimView
+from vyper_example.sim.open_auction import OpenAuction
+from vyper_example.sim.account import Account
+from vyper_example.sim.sim import Simulation
 
 
 pn.extension()
@@ -12,9 +12,12 @@ ACCENT_COLOR = "#00286e"
 SITE = "Vyper Example"
 TITLE = "Simulations"
 
+account = Account()
+open_auction = OpenAuction(beneficiary=account.address)
+
 models_row = pn.Row(
-    AccountView().display(),
-    OpenAuctionView().display(),
+    account.view,
+    open_auction.view,
 )
 
 models_pane = pn.Column(
@@ -24,7 +27,7 @@ models_pane = pn.Column(
 
 sim_pane = pn.Column(
     '# Simulation',
-    SimView().display(),
+    Simulation().view,
 )
 
 apps = [

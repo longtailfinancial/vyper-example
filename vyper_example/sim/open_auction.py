@@ -22,6 +22,9 @@ class OpenAuction(pm.Parameterized):
     # public(HashMap[address, uint256])
     pendingReturns = pm.Dict(default={}) 
 
+    def view(self):
+        return pn.panel(self)
+
 
 
 class View(pm.Parameterized):

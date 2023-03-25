@@ -21,10 +21,5 @@ class Account(pm.Parameterized):
         public = ETH_Account.from_key(private).address
         return private, public
 
-
-class View(pm.Parameterized):
-    def display(self):
-        account = Account()
-        return pn.panel(account)
-
-
+    def view(self):
+        return pn.panel(self)

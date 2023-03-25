@@ -10,29 +10,24 @@ import pandas as pd
 import numpy as np
 
 
-class View(pm.Parameterized):
-    n = 100
-    def display(self):
+class Simulation(pm.Parameterized):
 
-        records = [Account().param.values() for _ in range(self.n)]
+    n_accounts = pm.Integer(100, bounds=(0,None))
+    accounts = pm.DataFrame()
 
-        df = pd.DataFrame(records)
+    def __init__(self, **params):
+        super(Simulation, self).__init__(**params)
+        self.accounts = self._gen_accounts()
 
+    def _gen_accounts(self) -> pd.DataFrame:
+        records = [Account().param.values() for _ in range(self.n_accounts)]
+        df = pd.DataFrame(records)[['address', 'balance']]
+        return df
+
+    def view(self):
+        accounts_table = self.accounts.hvplot.table(width=1200)
         output = pn.Column(
-            'account_data', 
-            df.hvplot.table(width=1200),
+            'Accounts Table',
+            accounts_table,
         )
-
-        # output = pd.read_
-        a = Account()
-        output = df.hvplot.table()
-
-
-        # account = Account()
-        # account_data = dict(account.get_param_values())
         return output
-
-
-
-
-
