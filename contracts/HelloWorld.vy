@@ -1,3 +1,3 @@
-# @version >=0.3.8
+# @version >=0.3.7
 
 greet: public(constant(String[12])) = "Hello World!"

@@ -1,3 +1,5 @@
+# @version >=0.3.7
+
 # Open Auction
 
 # Auction params
