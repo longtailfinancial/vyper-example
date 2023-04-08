@@ -3,6 +3,7 @@ import holoviews as hv
 from vyper_example.sim.open_auction import OpenAuction
 from vyper_example.sim.account import Account
 from vyper_example.sim.sim import Simulation
+from vyper_example.sim.distributions import Distribution
 
 
 pn.extension()
@@ -25,9 +26,12 @@ models_pane = pn.Column(
     models_row,
 )
 
+distribution1 = Distribution()
+distribution2 = Distribution()
+
 sim_pane = pn.Column(
     '# Simulation',
-    Simulation().view,
+    Simulation(distributions=[distribution1, distribution2]).view,
 )
 
 apps = [

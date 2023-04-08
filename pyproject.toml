@@ -19,6 +19,7 @@ param = "^1.13.0"
 hvplot = "^0.8.3"
 pandas = "^1.5.3"
 holoviews = "^1.15.4"
+ipython = "^8.12.0"
 
 [build-system]
 requires = ["poetry-core"]
