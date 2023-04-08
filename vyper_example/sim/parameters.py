@@ -20,9 +20,13 @@ class Address(pm.String):
 
 class Uint256(pm.Integer):
     """Unsigned 256 bit Integer Parameter"""
-    def __init__(self, default=0, softbounds=None, **params):
-        super(Uint256, self).__init__(default=default, bounds=(0,(1<<256)-1), softbounds=softbounds, **params)
+    def __init__(self, default=0, **params):
+        super(Uint256, self).__init__(default=default, bounds=(0,(1<<256)-1), **params)
 
+class Balance(Uint256):
+    """Represents a token balance"""
+    def __init__(self, **params):
+        super(Balance, self).__init__(**params)
 
 class Bool(pm.Boolean):
     """Unsigned 256 bit Integer Parameter"""

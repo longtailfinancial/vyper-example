@@ -2,13 +2,13 @@ import panel as pn
 import param as pm
 import secrets
 from eth_account import Account as ETH_Account
-from vyper_example.sim.parameters import Address, Uint256
+from vyper_example.sim.parameters import Address
 
 class Account(pm.Parameterized):
 
     address = Address()
     key = pm.String(precedence=-1)
-    balance = Uint256()
+    balance = pm.Number(0, bounds=(0,None))
 
     def __init__(self, **params):
         super(Account, self).__init__(**params)
