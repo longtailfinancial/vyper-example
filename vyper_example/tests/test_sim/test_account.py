@@ -1,6 +1,8 @@
-from vyper_example.sim.account import Account
+from vyper_example.sim.accounts import Account
+from vyper_example.sim.ledger import Ledger
 
 
 def test_account():
-    account = Account()
+    ledger = Ledger()
+    account = Account(ledger=ledger)
     assert account.address

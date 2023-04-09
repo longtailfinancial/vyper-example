@@ -1,6 +1,6 @@
 import panel as pn
 import param as pm
-from vyper_example.sim.account import Account
+from vyper_example.sim.accounts import Account
 
 import hvplot.pandas
 
@@ -23,7 +23,7 @@ class Simulation(pm.Parameterized):
 
     # @pm.depends('n_accounts', watch=True)
     def _gen_accounts(self, n):
-        accounts_list = [Account().param.values() for _ in range(n)]
+        accounts_list = [Account(self.distribution).param.values() for _ in range(n)]
         accounts = pd.DataFrame(accounts_list)
         self.accounts = accounts
 

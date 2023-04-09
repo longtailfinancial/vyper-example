@@ -7,9 +7,9 @@ PROJECT_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(PROJECT_ROOT_DIR, 'data/')
 SAMPLE_PERCENT = 1
 
-sample_every_n_rows = int((1 / SAMPLE_PERCENT) * 100)
+sample_every_n_rows: int = int((1 / SAMPLE_PERCENT) * 100)
 
-class Distribution(pm.Parameterized):
+class Ledger(pm.Parameterized):
 
     df = pd.read_csv(
         os.path.join(DATA_DIR, 'eth_balances_small.csv'), 
