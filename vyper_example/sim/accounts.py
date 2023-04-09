@@ -1,5 +1,6 @@
 import panel as pn
 import param as pm
+import pandas as pd
 import secrets
 from eth_account import Account as ETH_Account
 from vyper_example.sim.parameters import Address
@@ -14,8 +15,13 @@ class Account(pm.Parameterized):
 
     def __init__(self, ledger: Ledger, **params):
         super(Account, self).__init__(**params)
-        self.key, self.address = self.generate_eth_account()
         self.ledger = ledger
+        self.key, self.address = self.generate_eth_account()
+        self.ledger.df = pd.concat(
+            [
+                self.ledger.df, 
+                pd.DataFrame([{'address': self.address, 'eth_balance': self.balance}]),
+            ], ignore_index=True)
 
     @staticmethod
     def generate_eth_account():

@@ -11,7 +11,7 @@ import numpy as np
 
 class Simulation(pm.Parameterized):
 
-    n_accounts = pm.Integer(100, bounds=(0,None))
+    n_accounts = pm.Integer(1, bounds=(0,None))
     accounts = pm.DataFrame(precedence=-1)
     distribution = pm.Selector()
 

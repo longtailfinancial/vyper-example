@@ -15,7 +15,7 @@ class Ledger(pm.Parameterized):
         os.path.join(DATA_DIR, 'eth_balances_small.csv'), 
         header=0, 
         skiprows=lambda i: i % sample_every_n_rows != 0,
-    )
+    )[['address', 'eth_balance']]
 
 
     def view(self):
