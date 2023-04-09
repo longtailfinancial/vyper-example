@@ -21,7 +21,6 @@ class Simulation(pm.Parameterized):
         self.distribution = distributions[0]
         self.gen_accounts()
 
-    # @pm.depends('n_accounts', watch=True)
     def _gen_accounts(self, n):
         accounts_list = [Account(self.distribution).param.values() for _ in range(n)]
         accounts = pd.DataFrame(accounts_list)
