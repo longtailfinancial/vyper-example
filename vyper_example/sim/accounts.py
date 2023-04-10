@@ -5,6 +5,7 @@ import secrets
 from eth_account import Account as ETH_Account
 from vyper_example.sim.parameters import Address
 from vyper_example.sim.ledger import Ledger
+from icecream import ic
 
 class Account(pm.Parameterized):
 
@@ -23,6 +24,25 @@ class Account(pm.Parameterized):
                 pd.DataFrame([{'address': self.address, 'eth_balance': self.balance}]),
             ], ignore_index=True)
 
+    def send(self, account, pending_amount):
+        ic(self.ledger.df)
+        ic(self.address)
+        ic(account)
+        ic(pending_amount)
+        assert self.balance >= pending_amount
+
+        self.balance -= pending_amount
+        self.ledger.df.set_index("address").loc[self.address]["eth_balance"] -= pending_amount
+
+        account.balance += pending_amount
+        self.ledger.df.set_index("address").loc[account.address]["eth_balance"] += pending_amount
+
+    def __str__(self):
+        return self.address
+
+    def __repr__(self):
+        return self.address
+
     @staticmethod
     def generate_eth_account():
         private = "0x" + secrets.token_hex(32)
@@ -32,12 +52,8 @@ class Account(pm.Parameterized):
     def view(self):
         return pn.panel(self)
 
-
 class Contract(Account):
-
-    def send(self, address, pending_amount):
-        self.ledger.df.loc[self.address]["eth_balance"] -= pending_amount
-        self.ledger.df.loc[address]["eth_balance"] += pending_amount
+    pass
 
 
 

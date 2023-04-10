@@ -26,17 +26,18 @@ class Simulation(pm.Parameterized):
         accounts = pd.DataFrame(accounts_list)
         self.accounts = accounts
 
-    def _sample_distribution(self, n):
-        return self.distribution.df.sample(n=n).sort_index()
-
+    @pm.depends('n_accounts', watch=True)
     def gen_accounts(self):
         return self._gen_accounts(self.n_accounts)
 
-    def sample_distribution(self):
-        return self._sample_distribution(self.n_accounts)
-
     def view_gen_accounts_table(self, columns=['address', 'balance']):
         return self.accounts[columns].hvplot.table(width=1200)
+
+    def _sample_distribution(self, n):
+        return self.distribution.df.sample(n=n).sort_index()
+
+    def sample_distribution(self):
+        return self._sample_distribution(self.n_accounts)
 
     def view_sample_distribution_table(self, columns=['address', 'eth_balance']):
         return lambda: self._sample_distribution(self.n_accounts)[columns].hvplot.table()
@@ -48,7 +49,7 @@ class Simulation(pm.Parameterized):
                 self,
                 pn.Column(
                     'Accounts Table',
-                    # self.view_gen_accounts_table,
+                    self.view_gen_accounts_table,
                     self.view_sample_distribution_table,
                 )
             )

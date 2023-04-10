@@ -44,7 +44,7 @@ bidding_time = 60*60
 
 # Initialize an Open Auction
 open_auction = OpenAuction(
-    beneficiary=beneficiary_account.address, 
+    beneficiary=beneficiary_account, 
     auction_start=auction_start,
     bidding_time=bidding_time,
     ledger=distribution1,
@@ -54,20 +54,23 @@ open_auction = OpenAuction(
 # ic(open_auction.param)
 
 bid = Bid(
-    value=5,
+    value=2,
     timestamp= int(dt.datetime.now().timestamp()),
-    sender = bidding_account.address,
+    sender = bidding_account,
     open_auction=open_auction,
 )
 
 withdraw = Withdraw(
-    sender = bidding_account.address,
+    sender = bidding_account,
     open_auction=open_auction,
 )
 
 # Display The Model Examples App
 models_row = pn.Row(
-    beneficiary_account.view,
+    pn.Column(
+        beneficiary_account.view,
+        bidding_account.view,
+    ),
     open_auction.view,
     bid,
     withdraw,
@@ -83,6 +86,13 @@ simulation_pane = pn.Column(
     Simulation(distributions=[distribution1, distribution2]).view,
 )
 
+# Display The Simulation App 
+ledger_pane = pn.Column(
+    '# Simulation Ledger',
+    distribution1.view,
+)
+
+
 
 # Serve The Panel App
 def app():
@@ -91,7 +101,8 @@ def app():
         title=TITLE,
         header_background=ACCENT_COLOR,
         main=[
-            simulation_pane,
+            # simulation_pane,
+            ledger_pane,
             models_pane,
         ],
     ).servable()

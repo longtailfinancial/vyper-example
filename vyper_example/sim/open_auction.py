@@ -1,21 +1,23 @@
 import param as pm
 import panel as pn
 from vyper_example.sim.accounts import Account, Contract
-from vyper_example.sim.parameters import Address
 import datetime as dt
 from collections import defaultdict
 from icecream import ic
 
+class DefaultDict(defaultdict):
+    __repr__ = dict.__repr__
+
 class OpenAuction(Contract):
 
-    beneficiary = Address()
+    beneficiary = pm.ClassSelector(class_=Account)
 
     # Auction Start and End
     auctionStart = pm.Date()
     auctionEnd = pm.Date()
 
     # Current state of the Auction
-    highestBidder = Address()
+    highestBidder = pm.ClassSelector(class_=Account)
     highestBid = pm.Number(0, bounds=(0,None))
 
     # Set to true at the end. Dissalows any change
@@ -23,9 +25,9 @@ class OpenAuction(Contract):
 
     # Keep track of refunded bids so we can follow the withdraw pattern
     # public(HashMap[address, uint256])
-    pendingReturns = pm.Dict(defaultdict(lambda: 0)) 
+    pendingReturns = pm.Dict(DefaultDict(lambda: 0)) 
 
-    def __init__(self, beneficiary: Address, auction_start: int, bidding_time: int, **params):
+    def __init__(self, beneficiary: Account, auction_start: int, bidding_time: int, **params):
         self.auctionStart = dt.datetime.fromtimestamp(auction_start)
         self.auctionEnd = dt.datetime.fromtimestamp(auction_start+bidding_time)
         super(OpenAuction, self).__init__(**params)
@@ -50,7 +52,6 @@ class OpenAuction(Contract):
         self.send(msg.sender, pending_amount)
 
 
-
     def view(self):
         return pn.Param(self.param, widgets={
             'auctionStart': pn.widgets.DatetimePicker,
@@ -58,7 +59,7 @@ class OpenAuction(Contract):
         })
 
 class Withdraw(pm.Parameterized):
-    sender = Address()
+    sender = pm.ClassSelector(class_=Account)
     open_auction = pm.ClassSelector(class_=OpenAuction)
     withdraw = pm.Action(lambda self: self._withdraw())
 
@@ -73,7 +74,7 @@ class Withdraw(pm.Parameterized):
 class Bid(pm.Parameterized):
     value = pm.Number(0, bounds=(0,None))
     timestamp = pm.Integer(bounds=(0,None))
-    sender = Address()
+    sender = pm.ClassSelector(class_=Account)
     open_auction = pm.ClassSelector(class_=OpenAuction)
     bid = pm.Action(lambda self: self._bid())
 
@@ -86,4 +87,10 @@ class Bid(pm.Parameterized):
         return MSG(), Block()
 
     def _bid(self):
-        self.open_auction.bid(*self._transaction())
+        try:
+            self.open_auction.bid(*self._transaction())
+            self.sender.send(self.open_auction, self.value)
+        except AssertionError as e:
+            ic("Transaction Failed")
+            raise e
+
