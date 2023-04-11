@@ -56,7 +56,7 @@ withdraw = Withdraw(
 )
 
 # Display The Model Examples App
-models_row = pn.Row(
+open_auction_row = pn.Row(
     pn.Column(
         beneficiary_account.view,
         bidding_account.view,
@@ -66,8 +66,8 @@ models_row = pn.Row(
     withdraw,
 )
 models_pane = pn.Column(
-    '# Models',
-    models_row,
+    '# Open Auction Model',
+    open_auction_row,
 )
 
 # Display The Simulation App 
@@ -89,4 +89,4 @@ def app():
         ],
     ).servable()
 
-app().show(threaded=True)
+app()#.show(threaded=True)
