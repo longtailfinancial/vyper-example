@@ -32,7 +32,7 @@ class Ledger(pm.Parameterized):
         self.param.trigger('df')
 
     def view(self):
-        ic(self.df)
+        # ic(self.df)
         return self.df.reset_index().hvplot.table()
 
 

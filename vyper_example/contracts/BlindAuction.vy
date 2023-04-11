@@ -112,7 +112,7 @@ def reveal(_numBids: int128, _values: uint256[128], _fakes: bool[128], _secrets:
             break
 
         # Get bid to check
-        bidToCheck: Bid == (self.bids[msg.sender])[i]
+        bidToCheck: Bid = (self.bids[msg.sender])[i]
 
         # Check against encoded packet
         value: uint256 = _values[i]
@@ -135,7 +135,7 @@ def reveal(_numBids: int128, _values: uint256[128], _fakes: bool[128], _secrets:
 
     # Send refund if non-zero
     if (refund != 0):
-        send(msg.ssender, refund)
+        send(msg.sender, refund)
 
 # Withdraw a bid that was overbid.
 @external
