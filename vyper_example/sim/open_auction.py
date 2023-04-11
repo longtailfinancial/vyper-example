@@ -51,6 +51,17 @@ class OpenAuction(Contract):
         self.pendingReturns[msg.sender] = 0
         self.send(msg.sender, pending_amount)
 
+    def end_auction(self, block):
+        # Enforce Constraints
+        assert block.timestamp >= int(self.auctionEnd.timestamp())
+        assert not self.ended
+
+        # Effects
+        self.ended = True
+
+        # Interactions
+        self.send(self.beneficiary, self.highestBid)
+
 
     def view(self):
         return pn.Param(self.param, widgets={
@@ -58,7 +69,10 @@ class OpenAuction(Contract):
             'auctionEnd': pn.widgets.DatetimePicker,
         })
 
-class Withdraw(pm.Parameterized):
+class Transaction(pm.Parameterized):
+    pass
+
+class Withdraw(Transaction):
     sender = pm.ClassSelector(class_=Account)
     open_auction = pm.ClassSelector(class_=OpenAuction)
     withdraw = pm.Action(lambda self: self._withdraw())
@@ -71,7 +85,7 @@ class Withdraw(pm.Parameterized):
     def _withdraw(self):
         self.open_auction.withdraw(*self._transaction())
 
-class Bid(pm.Parameterized):
+class Bid(Transaction):
     value = pm.Number(0, bounds=(0,None))
     timestamp = pm.Integer(bounds=(0,None))
     sender = pm.ClassSelector(class_=Account)
@@ -93,4 +107,18 @@ class Bid(pm.Parameterized):
         except AssertionError as e:
             ic("Transaction Failed")
             raise e
+
+class EndAuction(Transaction):
+    timestamp = pm.Integer(bounds=(0,None))
+    open_auction = pm.ClassSelector(class_=OpenAuction)
+    end_auction = pm.Action(lambda self: self._end_auction())
+
+    def _transaction(self):
+        class Block:
+            timestamp = self.timestamp
+        return [Block()]
+
+    def _end_auction(self):
+        self.open_auction.end_auction(*self._transaction())
+
 

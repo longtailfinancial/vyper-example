@@ -1,6 +1,6 @@
 import panel as pn
 import holoviews as hv
-from vyper_example.sim.open_auction import OpenAuction, Bid, Withdraw
+from vyper_example.sim.open_auction import OpenAuction, Bid, Withdraw, EndAuction
 from vyper_example.sim.accounts import Account
 from vyper_example.sim.ledger import Ledger
 import datetime as dt
@@ -55,6 +55,11 @@ withdraw = Withdraw(
     open_auction=open_auction,
 )
 
+end_auction = EndAuction(
+    timestamp= auction_start+bidding_time+1,
+    open_auction=open_auction,
+)
+
 # Display The Model Examples App
 open_auction_row = pn.Row(
     pn.Column(
@@ -64,6 +69,7 @@ open_auction_row = pn.Row(
     open_auction.view,
     bid,
     withdraw,
+    end_auction,
 )
 models_pane = pn.Column(
     '# Open Auction Model',
