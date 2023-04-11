@@ -3,7 +3,6 @@ import holoviews as hv
 from vyper_example.sim.open_auction import OpenAuction, Bid, Withdraw
 from vyper_example.sim.accounts import Account
 from vyper_example.sim.ledger import Ledger
-# from vyper_example.sim.simulation import Simulation
 import datetime as dt
 from icecream import ic
 pn.extension()
