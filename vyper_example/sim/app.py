@@ -3,7 +3,7 @@ import holoviews as hv
 from vyper_example.sim.open_auction import OpenAuction, Bid, Withdraw
 from vyper_example.sim.accounts import Account
 from vyper_example.sim.ledger import Ledger
-from vyper_example.sim.simulation import Simulation
+# from vyper_example.sim.simulation import Simulation
 import datetime as dt
 from icecream import ic
 pn.extension()
@@ -21,25 +21,19 @@ SITE = "Vyper Example"
 TITLE = "Simulations"
 
 # Initialize Ledgers
-distribution1 = Ledger()
-distribution2 = Ledger()
+ledger = Ledger()
 
 # Beneficiary Account
-beneficiary_account = Account(ledger=distribution1)
-# ic(beneficiary_account)
+beneficiary_account = Account(ledger=ledger)
 
 # Bidding Account
-bidding_account = Account(balance=10, ledger=distribution1)
-# ic(bidding_account)
+bidding_account = Account(balance=10, ledger=ledger)
 
 # Open Auction Parameters. Starting timestamp and number of seconds to run.
 auction_start = dt.datetime.now() 
 auction_start = auction_start.replace(second=0, microsecond=0, minute=0, hour=auction_start.hour)
 auction_start = int(auction_start.timestamp())
 bidding_time = 60*60
-# ic(auction_start)
-# ic(bidding_time)
-
 
 
 # Initialize an Open Auction
@@ -47,11 +41,8 @@ open_auction = OpenAuction(
     beneficiary=beneficiary_account, 
     auction_start=auction_start,
     bidding_time=bidding_time,
-    ledger=distribution1,
+    ledger=ledger,
 )
-
-# ic(open_auction)
-# ic(open_auction.param)
 
 bid = Bid(
     value=2,
@@ -81,17 +72,10 @@ models_pane = pn.Column(
 )
 
 # Display The Simulation App 
-simulation_pane = pn.Column(
-    '# Simulation',
-    Simulation(distributions=[distribution1, distribution2]).view,
-)
-
-# Display The Simulation App 
 ledger_pane = pn.Column(
     '# Simulation Ledger',
-    distribution1.view,
+    ledger.view,
 )
-
 
 
 # Serve The Panel App
@@ -101,10 +85,9 @@ def app():
         title=TITLE,
         header_background=ACCENT_COLOR,
         main=[
-            # simulation_pane,
             ledger_pane,
             models_pane,
         ],
     ).servable()
 
-app()#.show(threaded=True)
+app().show(threaded=True)

@@ -4,7 +4,6 @@ from vyper_example.sim.accounts import Account
 
 import hvplot.pandas
 
-
 import pandas as pd
 import numpy as np
 

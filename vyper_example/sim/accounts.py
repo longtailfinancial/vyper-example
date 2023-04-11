@@ -21,21 +21,14 @@ class Account(pm.Parameterized):
         self.ledger.df = pd.concat(
             [
                 self.ledger.df, 
-                pd.DataFrame([{'address': self.address, 'eth_balance': self.balance}]),
-            ], ignore_index=True)
+                pd.DataFrame([{'eth_balance': self.balance}], index=pd.Series([self.address], name='address')),
+            ])
 
     def send(self, account, pending_amount):
-        ic(self.ledger.df)
-        ic(self.address)
-        ic(account)
-        ic(pending_amount)
         assert self.balance >= pending_amount
-
+        self.ledger.send(self.address, account.address, pending_amount)
         self.balance -= pending_amount
-        self.ledger.df.set_index("address").loc[self.address]["eth_balance"] -= pending_amount
-
         account.balance += pending_amount
-        self.ledger.df.set_index("address").loc[account.address]["eth_balance"] += pending_amount
 
     def __str__(self):
         return self.address
@@ -54,6 +47,3 @@ class Account(pm.Parameterized):
 
 class Contract(Account):
     pass
-
-
-
